@@ -73,6 +73,13 @@
             } else {
                 alert('Failed to save customer data to GitHub.');
             }
+
+            if (!updateResponse.ok) {
+            const error = await updateResponse.json();
+            console.error('Error Response:', error);
+            alert(`Failed to save customer data to GitHub. Error: ${error.message || 'Unknown error'}`);
+        }
+
         });
     </script>
 
