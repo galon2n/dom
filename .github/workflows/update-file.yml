@@ -1,0 +1,26 @@
+name: Update File with User Data
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Update data file
+      run: |
+        echo "- $(date): ${{ github.event.issue.body }}" >> user-data.txt
+
+    - name: Commit and push changes
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+        git add user-data.txt
+        git commit -m "Update user-data.txt with new submission"
+        git push
