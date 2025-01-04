@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Clients</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Clients</title>
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Gestion des Clients</h1>
+    <button class="create-btn" onclick="window.location.href='create.html'">Créer un Nouveau Client</button>
+    <button class="flexy-btn" onclick="window.location.href='flexy.html'">Aller à la Gestion Flexy</button>
+    <button class="btn btn-scan" onclick="window.location.href='Ds.html'">Scan QR Code</button>
+
+
+    <div id="customer-list"></div>
+
+    <script>
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+
+        function renderCustomers() {
+            const customerList = document.getElementById('customer-list');
+            customerList.innerHTML = '';
+
+            customers.forEach((customer, index) => {
+                customerList.innerHTML += `
+                    <div class="customer">
+                        <span>${customer.name} - DA ${customer.balance.toFixed(2)}</span>
+                        <div class="controls">
+                            <input type="number" id="input-${index}" placeholder="Saisir le montant">
+                            <button class="btn btn-add" onclick="increase(${index})">+ Augmenter +</button>
+                            <button class="btn btn-subtract" onclick="subtract(${index})">- Soustraire -</button>
+                            <button class="btn btn-delete" onclick="deleteCustomer(${index})">Supprimer</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function increase(index) {
+            const input = document.getElementById(`input-${index}`);
+            const amount = parseFloat(input.value) || 0;
+            customers[index].balance += amount;
+            localStorage.setItem('customers', JSON.stringify(customers));
+            renderCustomers();
+        }
+
+        function subtract(index) {
+            const input = document.getElementById(`input-${index}`);
+            const amount = parseFloat(input.value) || 0;
+            customers[index].balance -= amount;
+            localStorage.setItem('customers', JSON.stringify(customers));
+            renderCustomers();
+        }
+
+        function deleteCustomer(index) {
+            customers.splice(index, 1);
+            localStorage.setItem('customers', JSON.stringify(customers));
+            renderCustomers();
+        }
+
+        window.onload = renderCustomers;
+    </script>
+
+</body>
+</html>
